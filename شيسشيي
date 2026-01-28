@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Game</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#0e1220;
+  color:white;
+}
+
+/* HERO */
+.hero{
+  height:100vh;
+  background:
+    linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.9)),
+    url('hero.jpg') center/cover no-repeat;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+
+.hero h1{
+  font-size:48px;
+  margin-bottom:20px;
+}
+
+.hero p{
+  font-size:18px;
+  max-width:500px;
+  margin:auto;
+}
+
+.hero button{
+  margin-top:30px;
+  padding:15px 40px;
+  font-size:20px;
+  border:none;
+  border-radius:40px;
+  cursor:pointer;
+  background:#4da3ff;
+  color:white;
+}
+
+/* CIRCLE */
+.circle{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  background:conic-gradient(#4da3ff 0deg, #1f1f1f 0deg);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  margin:30px auto 0;
+}
+
+.circle span{
+  font-size:22px;
+}
+</style>
+</head>
+
+<body>
+
+<section class="hero">
+  <div>
+    <h1>My Awesome Game</h1>
+    <p>Experience action, adventure, and fun. Download now and play!</p>
+
+    <button onclick="startDownload()">Download Game</button>
+
+    <div class="circle" id="circle">
+      <span id="count">0</span>
+    </div>
+  </div>
+</section>
+
+<script>
+let downloads = localStorage.getItem("downloads") || 0;
+let circle = document.getElementById("circle");
+let countText = document.getElementById("count");
+
+countText.innerText = downloads;
+
+function forceDownload(file){
+  const a = document.createElement("a");
+  a.href = file;
+  a.setAttribute("download","");
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function startDownload(){
+  downloads++;
+  localStorage.setItem("downloads", downloads);
+  countText.innerText = downloads;
+
+  circle.style.display = "flex";
+
+  let progress = 0;
+  let animate = setInterval(()=>{
+    progress += 6;
+    circle.style.background =
+      `conic-gradient(#4da3ff ${progress}deg, #1f1f1f 0deg)`;
+
+    if(progress >= 360){
+      clearInterval(animate);
+      forceDownload("app.apk");
+    }
+  },20);
+}
+</script>
+
+</body>
+</html>
